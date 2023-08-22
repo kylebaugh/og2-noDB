@@ -21,11 +21,52 @@ const toDoList = [
     {id:4, name:'Fight Ganon', complete:false}
 ]
 
+const doneList = [
+    {id: 1, name: 'Wash the dog', complete: true}
+
+]
+
 
 // ROUTES
 
 app.get('/api/todo', (req,res) => {
-    res.send(toDoList)
+    res.send({open: toDoList, closed: doneList})
+})
+
+app.post('/api/todo', (req, res) => {
+    const {name} = req.body
+    toDoList.push({
+        id: myId,
+        name,
+        complete: false
+    })
+
+    myId++
+
+    res.send({open: toDoList, closed: doneList})
+})
+
+app.put('/api/todo/:id', (req, res) => {
+    const {id} = req.params
+    const {name} = req.body
+
+    let index = toDoList.findIndex(item => item.id === +id)
+
+    toDoList[index].name = name
+
+    res.send({open: toDoList, closed: doneList})
+})
+
+app.delete('/api/todo/:id', (req, res) => {
+    const {id} = req.params
+
+    let index = toDoList.findIndex(item => item.id === +id)
+
+    doneList.push(toDoList[index])
+
+    toDoList.splice(index, 1)
+
+    res.send({open: toDoList, closed: doneList})
 })
 
 
